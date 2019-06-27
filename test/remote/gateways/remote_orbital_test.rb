@@ -132,6 +132,172 @@ class RemoteOrbitalGatewayTest < Test::Unit::TestCase
     assert_false response.authorization.blank?
   end
 
+  def test_successful_visa_authorization_with_3ds
+    cc = credit_card('4112344112344113', {
+      verification_value: '411',
+    })
+
+    assert response = @gateway.authorize(100, cc, @options.merge(
+      order_id: '2',
+      currency: 'USD',
+      three_d_secure: {
+        eci: '5',
+        cavv: 'AAABAIcJIoQDIzAgVAkiAAAAAAA=',
+        xid: 'AAABAIcJIoQDIzAgVAkiAAAAAAA=',
+      },
+      address: {
+        address1: '55 Forever Ave',
+        address2: '',
+        city: 'Concord',
+        state: 'NH',
+        zip: '03301',
+        country: 'US',
+      }
+    ))
+    assert_success response
+    assert_equal 'Approved', response.message
+    assert_false response.authorization.blank?
+  end
+
+  def test_successful_mastercard_authorization_with_3ds
+    cc = credit_card('5112345112345114', {
+      verification_value: '823',
+      brand: 'master',
+    })
+
+    assert response = @gateway.authorize(100, cc, @options.merge(
+      order_id: '2',
+      currency: 'USD',
+      three_d_secure: {
+        eci: '6',
+        cavv: 'Asju1ljfl86bAAAAAACm9zU6aqY=',
+        xid: 'Asju1ljfl86bAAAAAACm9zU6aqY=',
+      },
+      address: {
+        address1: 'Byway Street',
+        address2: '',
+        city: 'Portsmouth',
+        state: 'MA',
+        zip: '',
+        country: 'US',
+      }
+    ))
+    assert_success response
+    assert_equal 'Approved', response.message
+    assert_false response.authorization.blank?
+  end
+
+  def test_successful_discover_authorization_with_3ds
+    cc = credit_card('6011016011016011', {
+      verification_value: '613',
+      brand: 'discover',
+    })
+
+    assert response = @gateway.authorize(100, cc, @options.merge(
+      order_id: '2',
+      currency: 'USD',
+      three_d_secure: {
+        eci: '5',
+        cavv: 'Asju1ljfl86bAAAAAACm9zU6aqY=',
+        xid: 'Asju1ljfl86bAAAAAACm9zU6aqY=',
+      },
+      address: {
+        address1: '1 Northeastern Blvd',
+        address2: '',
+        city: 'Bedford',
+        state: 'NH',
+        zip: '03109',
+        country: 'US',
+      }
+    ))
+    assert_success response
+    assert_equal 'Approved', response.message
+    assert_false response.authorization.blank?
+  end
+
+  def test_successful_american_express_authorization_with_3ds
+    cc = credit_card('371144371144376', {
+      verification_value: '1234',
+      brand: 'american_express',
+    })
+
+    assert response = @gateway.authorize(100, cc, @options.merge(
+      order_id: '2',
+      currency: 'USD',
+      three_d_secure: {
+        eci: '5',
+        cavv: 'AAABBWcSNIdjeUZThmNHAAAAAAA=',
+        xid: 'AAABBWcSNIdjeUZThmNHAAAAAAA=',
+      },
+      address: {
+        address1: '4 Northeastern Blvd',
+        address2: '',
+        city: 'Salem',
+        state: 'NH',
+        zip: '03105',
+        country: 'US',
+      }
+    ))
+    assert_success response
+    assert_equal 'Approved', response.message
+    assert_false response.authorization.blank?
+  end
+
+  def test_successful_visa_purchase_with_3ds
+    cc = credit_card('4112344112344113', {
+      verification_value: '411',
+    })
+
+    assert response = @gateway.purchase(100, cc, @options.merge(
+      order_id: '2',
+      currency: 'USD',
+      three_d_secure: {
+        eci: '5',
+        cavv: 'AAABAIcJIoQDIzAgVAkiAAAAAAA=',
+        xid: 'AAABAIcJIoQDIzAgVAkiAAAAAAA=',
+      },
+      address: {
+        address1: '55 Forever Ave',
+        address2: '',
+        city: 'Concord',
+        state: 'NH',
+        zip: '03301',
+        country: 'US',
+      }
+    ))
+    assert_success response
+    assert_equal 'Approved', response.message
+    assert_false response.authorization.blank?
+  end
+
+  def test_successful_mastercard_purchase_with_3ds
+    cc = credit_card('5112345112345114', {
+      verification_value: '823',
+      brand: 'master',
+    })
+
+    assert response = @gateway.purchase(100, cc, @options.merge(
+      order_id: '2',
+      currency: 'USD',
+      three_d_secure: {
+        eci: '6',
+        cavv: 'Asju1ljfl86bAAAAAACm9zU6aqY=',
+        xid: 'Asju1ljfl86bAAAAAACm9zU6aqY=',
+      },
+      address: {
+        address1: 'Byway Street',
+        address2: '',
+        city: 'Portsmouth',
+        state: 'MA',
+        zip: '',
+        country: 'US',
+      }
+    ))
+    assert_success response
+    assert_equal 'Approved', response.message
+    assert_false response.authorization.blank?
+  end
+
   def test_successful_purchase_with_mit_stored_credentials
     mit_stored_credentials = {
       mit_msg_type: 'MUSE',

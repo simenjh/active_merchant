@@ -635,9 +635,9 @@ optimal_payment:
   account_number: ACCOUNTNUMBER
 
 orbital_gateway:
-  login: LOGIN
-  password: PASSWORD
-  merchant_id: MERCHANTID
+  login: TEST16SHOP202
+  password: d43hbSC6h663W
+  merchant_id: 700000011704
 
 # Working credentials, no need to replace
 pagarme:
