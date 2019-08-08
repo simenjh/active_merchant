@@ -5,8 +5,8 @@ module ActiveMerchant #:nodoc:
     class PayexGateway < Gateway
       class_attribute :live_external_url, :test_external_url, :live_confined_url, :test_confined_url
 
-      self.live_external_url = 'https://api.externalintegration.payex.com/'
-      self.test_external_url = 'https://api.externalintegration.payex.com/'
+      self.live_external_url = 'https://external.payex.com/'
+      self.test_external_url = 'https://external.externaltest.payex.com/'
 
       self.live_confined_url = 'https://confined.payex.com/'
       self.test_confined_url = 'https://test-confined.payex.com/'
